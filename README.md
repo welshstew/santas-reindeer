@@ -120,5 +120,8 @@ oc import-image fis-java-openshift --from=registry.access.redhat.com/jboss-fuse-
 mvn spring-boot:run
 curl -Iv http://localhost:8080/camel-rest-sql/books/
 
+
+oc new-app fis-java-openshift~https://github.com/welshstew/santas-reindeer --strategy=source
+
 ```
 

@@ -15,6 +15,8 @@
  */
 package org.swinchester.hackathons;
 
+import org.apache.camel.Exchange;
+import org.apache.camel.Processor;
 import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.component.servlet.CamelHttpTransportServlet;
 import org.apache.camel.model.rest.RestBindingMode;
@@ -37,7 +39,7 @@ public class Application extends SpringBootServletInitializer {
     @Bean
     ServletRegistrationBean servletRegistrationBean() {
         ServletRegistrationBean servlet = new ServletRegistrationBean(
-            new CamelHttpTransportServlet(), "/camel-rest-sql/*");
+            new CamelHttpTransportServlet(), "/*");
         servlet.setName("CamelServlet");
         return servlet;
     }
@@ -48,22 +50,30 @@ public class Application extends SpringBootServletInitializer {
         @Override
         public void configure() {
             restConfiguration()
-                .contextPath("/camel-rest-sql").apiContextPath("/api-doc")
-                    .apiProperty("api.title", "Camel REST API")
+                .contextPath("/").apiContextPath("/api-doc")
+                    .apiProperty("api.title", "Reindeer/Camel REST API")
                     .apiProperty("api.version", "1.0")
                     .apiProperty("cors", "true")
                     .apiContextRouteId("doc-api")
                 .component("servlet")
                 .bindingMode(RestBindingMode.json);
 
-            rest("/books").description("Books REST service")
-                .get("/").description("The list of all the books")
-                    .route().routeId("books-api")
+            rest("/reindeerservice").description("Reindeer REST service")
+                .post("/").outType(ServiceResponse.class).description("The list of all the teams")
+                    .route().routeId("reindeer-api")
                     .to("log:stuff?showAll=true")
+                    .process(new Processor() {
+                        @Override
+                        public void process(Exchange exchange) throws Exception {
+                            String hello = "";
+
+                        }
+                    })
                     .endRest()
-                .get("order/{id}").description("Details of an order by id")
-                    .route().routeId("order-api")
-                    .to("log:stuff?showAll=true");
+                .get("/ping").description("Simple ping")
+                    .route().routeId("ping-api")
+                    .to("log:stuff?showAll=true")
+                    .setBody(simple("{ \"ping\": \"success!\" }"));
         }
     }
 
@@ -75,7 +85,6 @@ public class Application extends SpringBootServletInitializer {
             // A first route generates some orders and queue them in DB
             from("timer:hello?period=5000")
                 .routeId("generate-order")
-                .bean("orderService", "generateOrder")
                 .log("Inserted new order ${body.id}");
 
 

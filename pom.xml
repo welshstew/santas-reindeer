@@ -7,8 +7,8 @@
   <artifactId>santas-reindeer</artifactId>
   <version>1.0-SNAPSHOT</version>
 
-  <name>Fabric8 :: Quickstarts :: Spring-Boot :: Camel REST / SQL</name>
-  <description>Spring Boot example running a Camel REST route connecting to a SQL database</description>
+  <name>Reindeer Simple Microservice</name>
+  <description>Reindeer Simple Microservice for EMEA hackathon</description>
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -70,20 +70,6 @@
     <dependency>
       <groupId>org.apache.camel</groupId>
       <artifactId>camel-groovy</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.camel</groupId>
-      <artifactId>camel-sql-starter</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>mysql</groupId>
-      <artifactId>mysql-connector-java</artifactId>
-      <scope>runtime</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.hsqldb</groupId>
-      <artifactId>hsqldb</artifactId>
-      <scope>runtime</scope>
     </dependency>
 
     <!-- testing -->
