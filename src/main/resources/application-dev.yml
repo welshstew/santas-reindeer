@@ -13,12 +13,6 @@ endpoints:
   health:
     enabled: true
 
-spring:
-  # Spring JDBC configuration
-  datasource:
-    # Let Spring Boot auto-configure an embedded HSQL database
-    url:
-
 # The application configuration properties
 quickstart:
   generateOrderPeriod: 2s

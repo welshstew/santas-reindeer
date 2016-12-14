@@ -69,11 +69,12 @@ public class Application extends SpringBootServletInitializer {
 
                         }
                     })
+                    .to("http4:")
                     .endRest()
                 .get("/ping").description("Simple ping")
                     .route().routeId("ping-api")
                     .to("log:stuff?showAll=true")
-                    .setBody(simple("{ \"ping\": \"success!\" }"));
+                    .setBody(constant("{ 'ping': 'success!' }"));
         }
     }
 
