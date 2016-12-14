@@ -75,14 +75,14 @@ public class Application extends SpringBootServletInitializer {
                             sr.setServiceName("shinny-upatree");
                             HashMap<String,String> nemap = null;
                             if(!sr.getPayload().isEmpty()){
-                                nemap = sr.getPayload().get(0).getNameEmailMap();
+                                nemap = sr.getPayload().get(0).getNameEmaiMap();
                             }
                             List<String> otherReindeers = (List<String>) exchange.getProperty("reindeers");
                             for(String deer : otherReindeers){
                                 Team newTeam = new Team();
                                 newTeam.setReindeerName(deer);
                                 newTeam.setTeamName("santas-helpers-b-team");
-                                newTeam.setNameEmailMap(nemap);
+                                newTeam.setNameEmaiMap(nemap);
                                 sr.getPayload().add(newTeam);
                             }
                         }

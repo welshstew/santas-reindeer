@@ -10,7 +10,7 @@ public class Team {
 
     private String teamName;
     private String reindeerName;
-    private HashMap<String,String> nameEmailMap;
+    private HashMap<String,String> nameEmaiMap;
 
     public String getTeamName() {
         return teamName;
@@ -28,12 +28,12 @@ public class Team {
         this.reindeerName = reindeerName;
     }
 
-    public HashMap<String, String> getNameEmailMap() {
-        return nameEmailMap;
+    public HashMap<String, String> getNameEmaiMap() {
+        return nameEmaiMap;
     }
 
-    public void setNameEmailMap(HashMap<String, String> nameEmailMap) {
-        this.nameEmailMap = nameEmailMap;
+    public void setNameEmaiMap(HashMap<String, String> nameEmaiMap) {
+        this.nameEmaiMap = nameEmaiMap;
     }
 
     public static Comparator<Team> TeamReindeerNameComparator
