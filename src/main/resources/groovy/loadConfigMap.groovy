@@ -8,6 +8,7 @@ import groovy.io.FileType
 //def list = [[path:'/etc/santas-config/team.b.reindeer.1'],
 //            [path:'/etc/santas-config/team.b.reindeer.2']]
 
+def list = []
 def reindeerList = []
 
 def dir = new File("/etc/santas-config")
