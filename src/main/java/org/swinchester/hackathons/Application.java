@@ -85,6 +85,8 @@ public class Application extends SpringBootServletInitializer {
                                 newTeam.setNameEmaiMap(nemap);
                                 sr.getPayload().add(newTeam);
                             }
+
+                            //TODO: need to sort the newTeam map
                         }
                     })
                     .to("log:stuff?showAll=true")
