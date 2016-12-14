@@ -30,6 +30,9 @@ import org.springframework.context.annotation.ImportResource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.HashMap;
+import java.util.List;
+
 @SpringBootApplication
 @ImportResource({"classpath:spring/camel-context.xml"})
 public class Application extends SpringBootServletInitializer {
@@ -64,7 +67,26 @@ public class Application extends SpringBootServletInitializer {
                 .post("/").outType(ServiceResponse.class).description("The list of all the teams")
                     .route().routeId("reindeer-api")
                     .to("log:stuff?showAll=true")
-                    .setProperty("something").groovy("resource:classpath:groovy/loadConfigMap.groovy")
+                    .setProperty("reindeers").groovy("resource:classpath:groovy/loadConfigMap.groovy")
+                    .process(new Processor() {
+                        @Override
+                        public void process(Exchange exchange) throws Exception {
+                            ServiceResponse sr = (ServiceResponse) exchange.getIn().getBody();
+                            sr.setServiceName("shinny-upatree");
+                            HashMap<String,String> nemap = null;
+                            if(!sr.getPayload().isEmpty()){
+                                nemap = sr.getPayload().get(0).getNameEmailMap();
+                            }
+                            List<String> otherReindeers = (List<String>) exchange.getProperty("reindeers");
+                            for(String deer : otherReindeers){
+                                Team newTeam = new Team();
+                                newTeam.setReindeerName(deer);
+                                newTeam.setTeamName("santas-helpers-b-team");
+                                newTeam.setNameEmailMap(nemap);
+                                sr.getPayload().add(newTeam);
+                            }
+                        }
+                    })
                     .process(new Processor() {
                         @Override
                         public void process(Exchange exchange) throws Exception {
