@@ -20,7 +20,9 @@ list.each { it ->
     println it.path
     if(it.path.contains('team.b')){
         String contents = new File(it.path).text
-        reindeerList.add(contents)
+        if(!reindeerList.contains(contents)) {
+            reindeerList.add(contents)
+        }
     }
 }
 

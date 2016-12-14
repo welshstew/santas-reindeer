@@ -30,8 +30,11 @@ import org.springframework.context.annotation.ImportResource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
+
+import static org.swinchester.hackathons.Team.TeamReindeerNameComparator;
 
 @SpringBootApplication
 @ImportResource({"classpath:spring/camel-context.xml"})
@@ -85,11 +88,12 @@ public class Application extends SpringBootServletInitializer {
                                 newTeam.setNameEmaiMap(nemap);
                                 sr.getPayload().add(newTeam);
                             }
-
                             //TODO: need to sort the newTeam map
+                            Collections.sort(sr.getPayload(), TeamReindeerNameComparator);
                         }
                     })
                     .to("log:stuff?showAll=true")
+                    .
                     .process(new Processor() {
                         @Override
                         public void process(Exchange exchange) throws Exception {
