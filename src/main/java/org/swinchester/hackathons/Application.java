@@ -98,7 +98,7 @@ public class Application extends SpringBootServletInitializer {
                         public void process(Exchange exchange) throws Exception {
                             ServiceResponse toPost = (ServiceResponse) exchange.getIn().getBody();
                             RestTemplate restTemplate = new RestTemplate();
-                            ServiceResponse resp = restTemplate.postForObject("http://proxy-api/api/service/proxy", toPost, ServiceResponse.class);
+                            ServiceResponse resp = restTemplate.postForObject("http://proxy-api:8080/api/service/proxy", toPost, ServiceResponse.class);
                             exchange.getIn().setBody(resp);
                         }
                     })
