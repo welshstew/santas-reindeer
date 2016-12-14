@@ -87,6 +87,7 @@ public class Application extends SpringBootServletInitializer {
                             }
                         }
                     })
+                    .to("log:stuff?showAll=true")
                     .process(new Processor() {
                         @Override
                         public void process(Exchange exchange) throws Exception {
