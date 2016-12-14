@@ -17,3 +17,7 @@ endpoints:
 quickstart:
   generateOrderPeriod: 10s
   processOrderPeriod: 30s
+
+logging:
+  level:
+    org.springframework.web: DEBUG

@@ -20,6 +20,7 @@ import org.apache.camel.Processor;
 import org.apache.camel.Service;
 import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.component.servlet.CamelHttpTransportServlet;
+import org.apache.camel.model.dataformat.JsonLibrary;
 import org.apache.camel.model.rest.RestBindingMode;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -27,13 +28,16 @@ import org.springframework.boot.web.servlet.ServletRegistrationBean;
 import org.springframework.boot.web.support.SpringBootServletInitializer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ImportResource;
+import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.StringHttpMessageConverter;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -97,22 +101,7 @@ public class Application extends SpringBootServletInitializer {
                         }
                     })
                     .to("log:stuff?showAll=true")
-                    .process(new Processor() {
-                        @Override
-                        public void process(Exchange exchange) throws Exception {
-                            ServiceResponse toPost = (ServiceResponse) exchange.getIn().getBody();
-                            RestTemplate rt = new RestTemplate();
-
-                            rt.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
-                            rt.getMessageConverters().add(new StringHttpMessageConverter());
-
-                            HttpHeaders headers = new HttpHeaders();
-                            headers.setContentType(MediaType.APPLICATION_JSON);
-
-                            ServiceResponse resp = rt.postForObject("http://proxy-api:8080/api/service/proxy", toPost, ServiceResponse.class, headers);
-                            exchange.getIn().setBody(resp);
-                        }
-                    })
+                    .process(new HttpProxyRequestor())
                     .endRest()
                 .get("/ping").description("Simple ping")
                     .route().routeId("ping-api")

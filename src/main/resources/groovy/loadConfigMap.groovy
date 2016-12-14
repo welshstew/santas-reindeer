@@ -12,18 +12,25 @@ def list = []
 def reindeerList = []
 
 def dir = new File("/etc/santas-config")
-dir.eachFileRecurse (FileType.FILES) { file ->
-    list << file
-}
+if (!dir.exists()){
+    reindeerList.add("Prancer")
+    reindeerList.add("Dancer")
+}else{
 
-list.each { it ->
-    println it.path
-    if(it.path.contains('team.b')){
-        String contents = new File(it.path).text
-        if(!reindeerList.contains(contents)) {
-            reindeerList.add(contents)
+    dir.eachFileRecurse (FileType.FILES) { file ->
+        list << file
+    }
+
+    list.each { it ->
+        println it.path
+        if(it.path.contains('team.b')){
+            String contents = new File(it.path).text
+            if(!reindeerList.contains(contents)) {
+                reindeerList.add(contents)
+            }
         }
     }
 }
+
 
 return reindeerList
