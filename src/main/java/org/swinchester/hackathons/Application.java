@@ -17,6 +17,7 @@ package org.swinchester.hackathons;
 
 import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
+import org.apache.camel.Service;
 import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.component.servlet.CamelHttpTransportServlet;
 import org.apache.camel.model.rest.RestBindingMode;
@@ -27,6 +28,7 @@ import org.springframework.boot.web.support.SpringBootServletInitializer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ImportResource;
 import org.springframework.stereotype.Component;
+import org.springframework.web.client.RestTemplate;
 
 @SpringBootApplication
 @ImportResource({"classpath:spring/camel-context.xml"})
@@ -65,13 +67,12 @@ public class Application extends SpringBootServletInitializer {
                     .process(new Processor() {
                         @Override
                         public void process(Exchange exchange) throws Exception {
-                            String hello = "";
-
+                            ServiceResponse toPost = (ServiceResponse) exchange.getIn().getBody();
+                            RestTemplate restTemplate = new RestTemplate();
+                            ServiceResponse resp = restTemplate.postForObject("http://proxy-api/api/service/proxy", toPost, ServiceResponse.class);
+                            exchange.getIn().setBody(resp);
                         }
                     })
-                    .setHeader(Exchange.HTTP_URI, constant("proxy-api"))
-                    .setHeader(Exchange.HTTP_PATH, constant("/api/service/proxy"))
-                    .to("http4")
                     .endRest()
                 .get("/ping").description("Simple ping")
                     .route().routeId("ping-api")
