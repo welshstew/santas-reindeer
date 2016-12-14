@@ -29,6 +29,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ImportResource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
+import org.springframework.http.converter.StringHttpMessageConverter;
+import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
@@ -99,12 +101,15 @@ public class Application extends SpringBootServletInitializer {
                         @Override
                         public void process(Exchange exchange) throws Exception {
                             ServiceResponse toPost = (ServiceResponse) exchange.getIn().getBody();
-                            RestTemplate restTemplate = new RestTemplate();
+                            RestTemplate rt = new RestTemplate();
+
+                            rt.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
+                            rt.getMessageConverters().add(new StringHttpMessageConverter());
 
                             HttpHeaders headers = new HttpHeaders();
                             headers.setContentType(MediaType.APPLICATION_JSON);
 
-                            ServiceResponse resp = restTemplate.postForObject("http://proxy-api:8080/api/service/proxy", toPost, ServiceResponse.class, headers);
+                            ServiceResponse resp = rt.postForObject("http://proxy-api:8080/api/service/proxy", toPost, ServiceResponse.class, headers);
                             exchange.getIn().setBody(resp);
                         }
                     })
