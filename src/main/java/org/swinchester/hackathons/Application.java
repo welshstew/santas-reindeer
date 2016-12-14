@@ -64,6 +64,7 @@ public class Application extends SpringBootServletInitializer {
                 .post("/").outType(ServiceResponse.class).description("The list of all the teams")
                     .route().routeId("reindeer-api")
                     .to("log:stuff?showAll=true")
+                    .setProperty("something").groovy("resource:classpath:groovy/loadConfigMap.groovy")
                     .process(new Processor() {
                         @Override
                         public void process(Exchange exchange) throws Exception {
@@ -87,9 +88,8 @@ public class Application extends SpringBootServletInitializer {
         @Override
         public void configure() {
             // A first route generates some orders and queue them in DB
-            from("timer:hello?period=5000")
-                .routeId("generate-order")
-                .log("Inserted new order ${body.id}");
+            from("timer:hello?period=60000").routeId("timer")
+                .log("Just saying i'm working...!");
 
 
         }

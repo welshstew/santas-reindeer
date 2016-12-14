@@ -1,5 +1,6 @@
 package org.swinchester.hackathons;
 
+import java.util.Comparator;
 import java.util.HashMap;
 
 /**
@@ -34,4 +35,12 @@ public class Team {
     public void setNameEmailMap(HashMap<String, String> nameEmailMap) {
         this.nameEmailMap = nameEmailMap;
     }
+
+    public static Comparator<Team> TeamReindeerNameComparator
+            = (team1, team2) -> {
+                String reindeerName1 = team1.getReindeerName().toUpperCase();
+                String reindeerName2 = team2.getReindeerName().toUpperCase();
+                //ascending order
+                return reindeerName1.compareTo(reindeerName2);
+            };
 }
