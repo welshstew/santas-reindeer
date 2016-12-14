@@ -69,7 +69,9 @@ public class Application extends SpringBootServletInitializer {
 
                         }
                     })
-                    .to("http4:")
+                    .setHeader(Exchange.HTTP_URI, constant("proxy-api"))
+                    .setHeader(Exchange.HTTP_PATH, constant("/api/service/proxy"))
+                    .to("http4")
                     .endRest()
                 .get("/ping").description("Simple ping")
                     .route().routeId("ping-api")
